@@ -1,0 +1,238 @@
+ {
+  "openapi": "3.0.0",
+  "info": {
+    "title": "RentX Documentation",
+    "description": "This is an API developed for the management of a car rental",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Developer - Ian Ramos",
+      "email": "ianramossantos@hotmail.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT" 
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/categories": {
+      "post": {
+        "tags": ["Category"],
+        "summary": "Create a category",
+        "description": "Create a new car category",
+        "operationId": "createCategory",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "$ref": "#/components/schemas/categoryName"
+                  },
+                  "description": {
+                    "$ref": "#/components/schemas/categoryDescription"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The category has been created"
+          },
+          "400": {
+            "description": "The category is already registered in the application",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "The category already exists",
+                  "code": "400",
+                  "error": "Bad Request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Category"],
+        "summary": "List all categories",
+        "description": "List all categories registered in the application",
+        "operationId": "listAllCategories",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Listing successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListedCategoriesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/import": {
+      "post": {
+        "tags": ["Category"],
+        "summary": "Import categories into the application",
+        "description": "Loads a .csv file of categories to be registered, in the application",
+        "operationId": "importCategories",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The categories were imported successfully"
+          }
+        }
+      }
+    },
+    "/specifications": {
+      "post": {
+        "tags": ["Specifications"],
+        "summary": "Create a specification",
+        "description": "Create a new car specification",
+        "operationId": "createSpecification",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "$ref": "#/components/schemas/specificationName"
+                  },
+                  "description": {
+                    "$ref": "#/components/schemas/specificationDescription"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The specification has been created"
+          },
+          "400": {
+            "description": "The specification is already registered in the application",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "The specification already exists",
+                  "code": "400",
+                  "error": "Bad Request"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "categoryId": {
+        "type": "string",
+        "format": "uuid",
+        "description": "The unique category ID"
+      },
+      "categoryName": {
+        "type": "string",
+        "description": "Category name to be registered",
+        "example": "SUV"
+      },
+      "categoryDescription": {
+        "type": "string",
+        "description": "Category description to be registered",
+        "example": "The acronym SUV stands for Sport Utility Vehicle - that is, sports utility vehicle. SUVs are usually large in size, with a spacious interior and the possibility to travel in and out of the city"
+      },
+      "categoryCreated_at": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Category creation date"
+      },
+      "specificationName": {
+        "type": "string",
+        "description": "Name of the specification of a car to be registered",
+        "example": "Automatic gearbox"
+      },
+      "specificationDescription": {
+        "type": "string",
+        "description": "Description of the specification of a car to be registered",
+        "example": "Car with automatic transmission"
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/categoryId"
+          },
+          "name": {
+            "$ref": "#/components/schemas/categoryName"
+          },
+          "description": {
+            "$ref": "#/components/schemas/categoryDescription"
+          },
+          "created_at": {
+            "$ref": "#/components/schemas/categoryCreated_at"
+          }
+        }
+      },
+      "ListedCategoriesResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Category"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "number"
+          },
+          "error": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+ }
