@@ -4,5 +4,8 @@
   "host": "localhost",
   "username": "docker",
   "password": "ignite",
-  "database": "rentx"
+  "database": "rentx",
+  "cli": {
+    "migrationsDir": "./src/database/migrations"
+  }
 }
