@@ -38,10 +38,15 @@ class AuthenticateUserUseCase {
       expiresIn: '1d',
     });
 
-    return {
-      user,
+    const tokenReturning: IResponse = {
+      user: {
+        name: user.name,
+        email: user.email,
+      },
       token,
     };
+
+    return tokenReturning;
   }
 }
 
