@@ -85,6 +85,8 @@ After your request is accepted and added to the project, you can delete your bra
 This project in under MIT license, for more details check in [LICENSE][license]. <br>
 Feel free to bring new features or fix problems, it will be a pleasure! 💜
 
+---
+
 <div align='center'>
   Made with 💚  by <strong>Ian Ramos</strong> 🔥
   <a href='https://www.linkedin.com/in/ian-ramos/'>Get in touch!</a>
