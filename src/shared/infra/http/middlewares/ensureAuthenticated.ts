@@ -12,7 +12,7 @@ export async function ensureAuthenticated(
   request: Request,
   response: Response,
   next: NextFunction
-) {
+): Promise<void> {
   const authHeader = request.headers.authorization;
 
   if (!authHeader) throw new AppError('Token is missing', 401);
@@ -20,10 +20,7 @@ export async function ensureAuthenticated(
   const [, token] = authHeader.split(' ');
 
   try {
-    const { sub: user_id } = verify(
-      token,
-      '466101563dd1246815f434cce7a38f73'
-    ) as IPayload;
+    const { sub: user_id } = verify(token, '466101563dd1246815f434cce7a38f73') as IPayload;
 
     const usersRepository = new UsersRepository();
 
