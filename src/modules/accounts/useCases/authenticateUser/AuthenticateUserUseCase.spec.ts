@@ -12,9 +12,7 @@ let createUserUseCase: CreateUserUseCase;
 describe('Authenticate User', () => {
   beforeEach(() => {
     usersRepositoryInMemory = new UsersRepositoryInMemory();
-    authenticateUserUseCase = new AuthenticateUserUseCase(
-      usersRepositoryInMemory
-    );
+    authenticateUserUseCase = new AuthenticateUserUseCase(usersRepositoryInMemory);
     createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory);
   });
 
