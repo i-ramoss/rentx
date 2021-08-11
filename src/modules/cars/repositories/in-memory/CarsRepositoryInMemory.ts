@@ -38,10 +38,10 @@ class CarsRepositoryInMemory implements ICarsRepository {
   async findAvailable(name?: string, brand?: string, category_id?: string): Promise<Car[]> {
     const cars = this.cars.filter(car => {
       if (
-        car.available &&
-        ((name && car.name === name) ||
-          (brand && car.brand === brand) ||
-          (category_id && car.category_id === category_id))
+        car.available ||
+        (name && car.name === name) ||
+        (brand && car.brand === brand) ||
+        (category_id && car.category_id === category_id)
       )
         return car;
       return null;
