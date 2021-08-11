@@ -9,10 +9,10 @@ class ListAvailableCarsController {
 
     const listAvailableCarsUseCase = container.resolve(ListAvailableCarsUseCase);
 
-    const cars = listAvailableCarsUseCase.execute({
-      name: name as string, // força a tipagem do parâmetro
-      brand: brand as string, // força a tipagem do parâmetro
-      category_id: category_id as string, // força a tipagem do parâmetro
+    const cars = await listAvailableCarsUseCase.execute({
+      name: name as string,
+      brand: brand as string,
+      category_id: category_id as string,
     });
 
     return response.json(cars);
