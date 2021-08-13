@@ -28,8 +28,10 @@ class SpecificationsRepository implements ISpecificationsRepository {
     return specification;
   }
 
-  findByIds(ids: string[]): Promise<Specification[]> {
-    throw new Error('Method not implemented.');
+  async findByIds(ids: string[]): Promise<Specification[]> {
+    const specifications = await this.repository.findByIds(ids);
+
+    return specifications;
   }
 }
 
