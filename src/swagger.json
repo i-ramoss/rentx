@@ -53,7 +53,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/AppError"
                 },
                 "example": {
                   "message": "The category already exists",
@@ -147,12 +147,122 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/AppError"
                 },
                 "example": {
                   "message": "The specification already exists",
                   "code": "400",
                   "error": "Bad Request"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars": {
+      "post": {
+        "tags": ["Cars"],
+        "summary": "Create a car",
+        "description": "Create a new car",
+        "operationId": "createCar",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "$ref": "#/components/schemas/carName"
+                  },
+                  "description": {
+                    "$ref": "#/components/schemas/carDescription"
+                  },
+                  "daily_rate": {
+                    "$ref": "#/components/schemas/carDailyRate"
+                  },
+                  "license_plate": {
+                    "$ref": "#/components/schemas/carLicensePlate"
+                  },
+                  "fine_amount": {
+                    "$ref": "#/components/schemas/carFineAmount"
+                  },
+                  "brand": {
+                    "$ref": "#/components/schemas/carBrand"
+                  },
+                  "category_id": {
+                    "$ref": "#/components/schemas/FKCarCategoryId"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The car has been created"
+          },
+          "400": {
+            "description": "The car is already registered in the application",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                },
+                "example": {
+                  "message": "The car already exists",
+                  "code": 400,
+                  "error": "Bad Request"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/available":{
+      "get": {
+        "tags": ["Cars"],
+        "summary": "List all available cars",
+        "description": "List all cars that are available to be rented.",
+        "operationId": "listAvailableCars",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Listing successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListedCarsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/specifications/:car_id": {
+      "patch": {
+        "tags": ["Cars"],
+        "summary": "Add a spec",
+        "description": "Add a specification on a car",
+        "operationId": "createCarSpecification",
+        "parameters": [{
+          "$ref": "#/components/schemas/parameters/carIdParam"
+        }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "specifications_id": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/specificationId"
+                    }
+                  }
                 }
               }
             }
@@ -183,6 +293,12 @@
         "format": "date-time",
         "description": "Category creation date"
       },
+      "specificationId": {
+        "type": "string",
+        "format": "uuid",
+        "description": "The unique specification ID",
+        "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      },
       "specificationName": {
         "type": "string",
         "description": "Name of the specification of a car to be registered",
@@ -192,6 +308,58 @@
         "type": "string",
         "description": "Description of the specification of a car to be registered",
         "example": "Car with automatic transmission"
+      },
+      "carId": {
+        "type": "string",
+        "format": "uuid",
+        "description": "The unique car ID",
+        "example": "745f39d5-92fc-4674-984b-14a51462c7ad"
+      },
+      "carName": {
+        "type": "string",
+        "description": "Car name to be registered",
+        "example": "Audi R8"
+      },
+      "carDescription": {
+        "type": "string",
+        "description": "Car description to be registered",
+        "example": "The design of the R8 reflects its powerful and sporty character. The entire appearance of the R8 conveys a feeling of lightness and technical precision."
+      },
+      "carDailyRate": {
+        "type": "number",
+        "description": "The daily rate of the car to be registered.",
+        "example": 280
+      },
+      "carAvailable": {
+        "type": "boolean",
+        "description": "The availability of the car to be registered.",
+        "example": "true / false",
+        "default": true
+      },
+      "carLicensePlate": {
+        "type": "string",
+        "description": "The registration plate of the car to be registered.",
+        "example": "BRA2E19"
+      },
+      "carFineAmount": {
+        "type": "number",
+        "description": "The daily fine for a car to be registered.",
+        "example": 100
+      },
+      "carBrand": {
+        "type": "string",
+        "description": "The brand of the car to be registered.",
+        "example": "Audi"
+      },
+      "FKCarCategoryId": {
+        "type": "string",
+        "format": "uuid",
+        "description": "The id referring to the category of the car being registered."
+      },
+      "carCreatedAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Car creation time"
       },
       "Category": {
         "type": "object",
@@ -210,13 +378,68 @@
           }
         }
       },
+      "Car": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/carId"
+          },
+          "available": {
+            "$ref": "#/components/schemas/carAvailable"
+          },
+          "name": {
+            "$ref": "#/components/schemas/carName"
+          },
+          "description": {
+            "$ref": "#/components/schemas/carDescription"
+          },
+          "daily_rate": {
+            "$ref": "#/components/schemas/carDailyRate"
+          },
+          "license_plate": {
+            "$ref": "#/components/schemas/carLicensePlate"
+          },
+          "fine_amount": {
+            "$ref": "#/components/schemas/carFineAmount"
+          },
+          "brand": {
+            "$ref": "#/components/schemas/carBrand"
+          },
+          "category_id": {
+            "$ref": "#/components/schemas/FKCarCategoryId"
+          },
+          "created_at": {
+            "$ref": "#/components/schemas/carCreatedAt"
+          }
+        }
+      },
+
       "ListedCategoriesResponse": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/Category"
         }
       },
-      "Error": {
+      "ListedCarsResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Car"
+        }
+      },
+      "parameters": {
+        "carIdParam": {
+          "name": "car_id",
+          "in": "path",
+          "description": "Car id that will have the spec added.",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "/cars/specifications/745f39d5-92fc-4674-984b-14a51462c7ad"
+        }
+      },
+      "AppError": {
         "type": "object",
         "properties": {
           "message": {
