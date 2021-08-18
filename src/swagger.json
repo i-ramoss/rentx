@@ -53,7 +53,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/AppError"
                 },
                 "example": {
                   "message": "The category already exists",
@@ -147,10 +147,332 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/AppError"
                 },
                 "example": {
                   "message": "The specification already exists",
+                  "code": "400",
+                  "error": "Bad Request"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars": {
+      "post": {
+        "tags": ["Cars"],
+        "summary": "Create a car",
+        "description": "Create a new car",
+        "operationId": "createCar",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "$ref": "#/components/schemas/carName"
+                  },
+                  "description": {
+                    "$ref": "#/components/schemas/carDescription"
+                  },
+                  "daily_rate": {
+                    "$ref": "#/components/schemas/carDailyRate"
+                  },
+                  "license_plate": {
+                    "$ref": "#/components/schemas/carLicensePlate"
+                  },
+                  "fine_amount": {
+                    "$ref": "#/components/schemas/carFineAmount"
+                  },
+                  "brand": {
+                    "$ref": "#/components/schemas/carBrand"
+                  },
+                  "category_id": {
+                    "$ref": "#/components/schemas/FKCarCategoryId"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The car has been created"
+          },
+          "400": {
+            "description": "The car is already registered in the application",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                },
+                "example": {
+                  "message": "The car already exists",
+                  "code": 400,
+                  "error": "Bad Request"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/available":{
+      "get": {
+        "tags": ["Cars"],
+        "summary": "List all available cars",
+        "description": "List all cars that are available to be rented.",
+        "operationId": "listAvailableCars",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Listing successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListedCarsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/specifications/:car_id": {
+      "patch": {
+        "tags": ["Cars"],
+        "summary": "Add a spec",
+        "description": "Add a specification on a car",
+        "operationId": "createCarSpecification",
+        "parameters": [{
+          "$ref": "#/components/schemas/parameters/carIdParam"
+        }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "specifications_id": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/specificationId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added specification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref":"#/components/schemas/Car"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "specifications": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Specification"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/images/:card_id": {
+      "post": {
+        "tags": ["Cars"],
+        "summary": "Upload car images.",
+        "description": "Upload .jpg/.png.jpeg images to be registered in a car.",
+        "operationId": "uploadCarImages",
+        "parameters": [{
+          "$ref": "#/components/schemas/parameters/carIdParam"
+        }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The images were uploaded successfully"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": ["Account"],
+        "summary": "Create a user",
+        "description": "Create a new user",
+        "operationId": "createUser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "$ref":"#/components/schemas/userName"
+                  },
+                  "email": {
+                    "$ref": "#/components/schemas/userEmail"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/userPassword"
+                  },
+                  "driver_license": {
+                    "$ref": "#/components/schemas/userDriverLicense"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The user has been created"
+          },
+          "400": {
+            "description": "The user is already registered in the application",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                },
+                "example": {
+                  "message": "The user already exists",
+                  "code": 400,
+                  "error": "Bad Request"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/avatar": {
+      "patch": {
+        "tags": ["Account"],
+        "summary": "Upload user image",
+        "description": "Upload .jpg/.png.jpeg image to be registered in a user.",
+        "operationId": "updateUserAvatar",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Image successfully added."
+          }
+        }
+      }
+    },
+    "/sessions": {
+      "post": {
+        "tags": ["Account"],
+        "summary": "User authentication",
+        "description": "Starts a session, authenticating the user and generating a temporary token for the user.",
+        "operationId": "authenticateUser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "$ref": "#/components/schemas/userEmail"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/userPassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "$ref": "#/components/schemas/userName"
+                        },
+                        "email": {
+                          "$ref": "#/components/schemas/userEmail"
+                        }
+                      } 
+                    },
+                    "token": {
+                      "type":"string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or password incorrect!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                },
+                "example": {
+                  "message": "Email or password incorrect!",
                   "code": "400",
                   "error": "Bad Request"
                 }
@@ -183,6 +505,12 @@
         "format": "date-time",
         "description": "Category creation date"
       },
+      "specificationId": {
+        "type": "string",
+        "format": "uuid",
+        "description": "The unique specification ID",
+        "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      },
       "specificationName": {
         "type": "string",
         "description": "Name of the specification of a car to be registered",
@@ -192,6 +520,89 @@
         "type": "string",
         "description": "Description of the specification of a car to be registered",
         "example": "Car with automatic transmission"
+      },
+      "specificationCreatedAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Spec creation time"
+      },
+      "carId": {
+        "type": "string",
+        "format": "uuid",
+        "description": "The unique car ID",
+        "example": "745f39d5-92fc-4674-984b-14a51462c7ad"
+      },
+      "carName": {
+        "type": "string",
+        "description": "Car name to be registered",
+        "example": "Audi R8"
+      },
+      "carDescription": {
+        "type": "string",
+        "description": "Car description to be registered",
+        "example": "The design of the R8 reflects its powerful and sporty character. The entire appearance of the R8 conveys a feeling of lightness and technical precision."
+      },
+      "carDailyRate": {
+        "type": "number",
+        "description": "The daily rate of the car to be registered.",
+        "example": 280
+      },
+      "carAvailable": {
+        "type": "boolean",
+        "description": "The availability of the car to be registered.",
+        "example": "true / false",
+        "default": true
+      },
+      "carLicensePlate": {
+        "type": "string",
+        "description": "The registration plate of the car to be registered.",
+        "example": "BRA2E19"
+      },
+      "carFineAmount": {
+        "type": "number",
+        "description": "The daily fine for a car to be registered.",
+        "example": 100
+      },
+      "carBrand": {
+        "type": "string",
+        "description": "The brand of the car to be registered.",
+        "example": "Audi"
+      },
+      "FKCarCategoryId": {
+        "type": "string",
+        "format": "uuid",
+        "description": "The id referring to the category of the car being registered."
+      },
+      "carCreatedAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Car creation time"
+      },
+      "userId": {
+        "type": "string",
+        "format": "uuid",
+        "description": "The unique car ID",
+        "example": "e1c8c595-14d7-4bd8-9045-a939808d1533"
+      },
+      "userName": {
+        "type": "string",
+        "description": "Username to be registered",
+        "example": "Flora Ramos"
+      },
+      "userEmail": {
+        "type": "string",
+        "description": "User email to be registered",
+        "example": "flora@dev.com.br"
+      },
+      "userPassword": {
+        "type": "string",
+        "description": "User password to be registered",
+        "example": "flora_dev_password"
+      },
+      "userDriverLicense": {
+        "type": "string",
+        "description": "The driver's license registration number of the user to be registered.",
+        "example": "123456789"
       },
       "Category": {
         "type": "object",
@@ -210,13 +621,120 @@
           }
         }
       },
+      "Car": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/carId"
+          },
+          "available": {
+            "$ref": "#/components/schemas/carAvailable"
+          },
+          "name": {
+            "$ref": "#/components/schemas/carName"
+          },
+          "description": {
+            "$ref": "#/components/schemas/carDescription"
+          },
+          "daily_rate": {
+            "$ref": "#/components/schemas/carDailyRate"
+          },
+          "license_plate": {
+            "$ref": "#/components/schemas/carLicensePlate"
+          },
+          "fine_amount": {
+            "$ref": "#/components/schemas/carFineAmount"
+          },
+          "brand": {
+            "$ref": "#/components/schemas/carBrand"
+          },
+          "category_id": {
+            "$ref": "#/components/schemas/FKCarCategoryId"
+          },
+          "created_at": {
+            "$ref": "#/components/schemas/carCreatedAt"
+          }
+        }
+      },
+      "Specification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/specificationId"
+          },
+          "name": {
+            "$ref": "#/components/schemas/specificationName"
+          },
+          "description": {
+            "$ref": "#/components/schemas/specificationDescription"
+          },
+          "created_at": {
+            "$ref": "#/components/schemas/specificationCreatedAt"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/userId"
+          },
+          "name": {
+            "$ref": "#/components/schemas/userName"
+          },
+          "password": {
+            "$ref": "#/components/schemas/userPassword"
+          },
+          "email": {
+            "$ref": "#/components/schemas/userEmail"
+          },
+          "driver_license": {
+            "$ref": "#/components/schemas/userDriverLicense"
+          },
+          "isAdmin": {
+            "type": "boolean",
+            "description": "User permission as administrator.",
+            "example": "true / false",
+            "default": false
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "User creation time"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "User image registry name",
+            "example": "2fd43415b13dee641b00807745485df8-girl.png"
+          }
+        }
+      },
       "ListedCategoriesResponse": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/Category"
         }
       },
-      "Error": {
+      "ListedCarsResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Car"
+        }
+      },
+      "parameters": {
+        "carIdParam": {
+          "name": "car_id",
+          "in": "path",
+          "description": "Car id that will have the spec added.",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "745f39d5-92fc-4674-984b-14a51462c7ad"
+        }
+      },
+      "AppError": {
         "type": "object",
         "properties": {
           "message": {
