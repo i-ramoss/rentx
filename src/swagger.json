@@ -384,7 +384,7 @@
     "/users/avatar": {
       "patch": {
         "tags": ["Account"],
-        "summary": "Upload user image.",
+        "summary": "Upload user image",
         "description": "Upload .jpg/.png.jpeg image to be registered in a user.",
         "operationId": "updateUserAvatar",
         "parameters": [],
@@ -406,6 +406,76 @@
         "responses": {
           "201": {
             "description": "Image successfully added."
+          }
+        }
+      }
+    },
+    "/sessions": {
+      "post": {
+        "tags": ["Account"],
+        "summary": "User authentication",
+        "description": "Starts a session, authenticating the user and generating a temporary token for the user.",
+        "operationId": "authenticateUser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "$ref": "#/components/schemas/userEmail"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/userPassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "$ref": "#/components/schemas/userName"
+                        },
+                        "email": {
+                          "$ref": "#/components/schemas/userEmail"
+                        }
+                      } 
+                    },
+                    "token": {
+                      "type":"string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or password incorrect!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                },
+                "example": {
+                  "message": "Email or password incorrect!",
+                  "code": "400",
+                  "error": "Bad Request"
+                }
+              }
+            }
           }
         }
       }
