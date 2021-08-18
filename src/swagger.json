@@ -274,12 +274,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
+                  "allOf": [
                     {
-                      "$ref": "#/components/schemas/Car"
+                      "$ref":"#/components/schemas/Car"
                     },
                     {
-                      "$ref": "#/components/schemas/Specification"
+                      "type": "object",
+                      "properties": {
+                        "specifications": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Specification"
+                          }
+                        }
+                      }
                     }
                   ]
                 }
@@ -292,6 +300,13 @@
   },
   "components": {
     "schemas": {
+      "CategoryContent": {},
+      "SpecificationContent": {},
+      "CarContent": {},
+      "ErrorContent": {},
+      "Authentication": {},
+      "Requests": {},
+      "Responses": {},
       "categoryId": {
         "type": "string",
         "format": "uuid",
