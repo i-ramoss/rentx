@@ -328,6 +328,58 @@
           }
         }
       }
+    },
+    "/users": {
+      "post": {
+        "tags": ["Accounts"],
+        "summary": "Create a user",
+        "description": "Create a new user",
+        "operationId": "createUser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "$ref":"#/components/schemas/userName"
+                  },
+                  "email": {
+                    "$ref": "#/components/schemas/userEmail"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/userPassword"
+                  },
+                  "driver_license": {
+                    "$ref": "#/components/schemas/userDriverLicense"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The user has been created"
+          },
+          "400": {
+            "description": "The user is already registered in the application",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                },
+                "example": {
+                  "message": "The user already exists",
+                  "code": 400,
+                  "error": "Bad Request"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -425,6 +477,32 @@
         "format": "date-time",
         "description": "Car creation time"
       },
+      "userId": {
+        "type": "string",
+        "format": "uuid",
+        "description": "The unique car ID",
+        "example": "e1c8c595-14d7-4bd8-9045-a939808d1533"
+      },
+      "userName": {
+        "type": "string",
+        "description": "Username to be registered",
+        "example": "Flora Ramos"
+      },
+      "userEmail": {
+        "type": "string",
+        "description": "User email to be registered",
+        "example": "flora@dev.com.br"
+      },
+      "userPassword": {
+        "type": "string",
+        "description": "User password to be registered",
+        "example": "flora_dev_password"
+      },
+      "userDriverLicense": {
+        "type": "string",
+        "description": "The driver's license registration number of the user to be registered.",
+        "example": "123456789"
+      },
       "Category": {
         "type": "object",
         "properties": {
@@ -491,6 +569,42 @@
           },
           "created_at": {
             "$ref": "#/components/schemas/specificationCreatedAt"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/userId"
+          },
+          "name": {
+            "$ref": "#/components/schemas/userName"
+          },
+          "password": {
+            "$ref": "#/components/schemas/userPassword"
+          },
+          "email": {
+            "$ref": "#/components/schemas/userEmail"
+          },
+          "driver_license": {
+            "$ref": "#/components/schemas/userDriverLicense"
+          },
+          "isAdmin": {
+            "type": "boolean",
+            "description": "User permission as administrator.",
+            "example": "true / false",
+            "default": false
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "User creation time"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "User image registry name",
+            "example": "2fd43415b13dee641b00807745485df8-girl.png"
           }
         }
       },
