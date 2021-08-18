@@ -331,7 +331,7 @@
     },
     "/users": {
       "post": {
-        "tags": ["Accounts"],
+        "tags": ["Account"],
         "summary": "Create a user",
         "description": "Create a new user",
         "operationId": "createUser",
@@ -377,6 +377,35 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/users/avatar": {
+      "patch": {
+        "tags": ["Account"],
+        "summary": "Upload user image.",
+        "description": "Upload .jpg/.png.jpeg image to be registered in a user.",
+        "operationId": "updateUserAvatar",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Image successfully added."
           }
         }
       }
