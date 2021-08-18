@@ -267,6 +267,25 @@
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Added specification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Car"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Specification"
+                    }
+                  ]
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -308,6 +327,11 @@
         "type": "string",
         "description": "Description of the specification of a car to be registered",
         "example": "Car with automatic transmission"
+      },
+      "specificationCreatedAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Spec creation time"
       },
       "carId": {
         "type": "string",
@@ -413,7 +437,23 @@
           }
         }
       },
-
+      "Specification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/specificationId"
+          },
+          "name": {
+            "$ref": "#/components/schemas/specificationName"
+          },
+          "description": {
+            "$ref": "#/components/schemas/specificationDescription"
+          },
+          "created_at": {
+            "$ref": "#/components/schemas/specificationCreatedAt"
+          }
+        }
+      },
       "ListedCategoriesResponse": {
         "type": "array",
         "items": {
