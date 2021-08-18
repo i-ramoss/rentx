@@ -303,7 +303,9 @@
         "summary": "Upload car images.",
         "description": "Upload .jpg/.png.jpeg images to be registered in a car.",
         "operationId": "uploadCarImages",
-        "parameters": [],
+        "parameters": [{
+          "$ref": "#/components/schemas/parameters/carIdParam"
+        }],
         "requestBody": {
           "content": {
             "multipart/form-data": {
