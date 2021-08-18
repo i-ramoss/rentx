@@ -296,17 +296,42 @@
           }
         }
       }
+    },
+    "/cars/images/:card_id": {
+      "post": {
+        "tags": ["Cars"],
+        "summary": "Upload car images.",
+        "description": "Upload .jpg/.png.jpeg images to be registered in a car.",
+        "operationId": "uploadCarImages",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The images were uploaded successfully"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "CategoryContent": {},
-      "SpecificationContent": {},
-      "CarContent": {},
-      "ErrorContent": {},
-      "Authentication": {},
-      "Requests": {},
-      "Responses": {},
       "categoryId": {
         "type": "string",
         "format": "uuid",
@@ -491,7 +516,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "example": "/cars/specifications/745f39d5-92fc-4674-984b-14a51462c7ad"
+          "example": "745f39d5-92fc-4674-984b-14a51462c7ad"
         }
       },
       "AppError": {
