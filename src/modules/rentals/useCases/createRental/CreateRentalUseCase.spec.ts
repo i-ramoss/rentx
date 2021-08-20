@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 
+import { RentalsRepositoryInMemory } from '@modules/rentals/repositories/in-memory/RentalsRepositoryInMemory';
+import { IRentalsRepository } from '@modules/rentals/repositories/IRentalsRepository';
 import { DayJsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayJsDateProvider';
 import { AppError } from '@shared/errors/AppError';
 
-import { RentalsRepositoryInMemory } from '../repositories/in-memory/RentalsRepositoryInMemory';
-import { IRentalsRepository } from '../repositories/IRentalsRepository';
 import { CreateRentalUseCase } from './CreateRentalUseCase';
 
 let rentalsRepositoryInMemory: IRentalsRepository;
