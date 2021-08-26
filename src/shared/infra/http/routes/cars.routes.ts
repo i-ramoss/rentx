@@ -33,7 +33,6 @@ carsRoutes.post(
   '/images/:car_id',
   ensureAuthenticated,
   ensureAdmin,
-  // utiliza a propriedade array do upload para enviar várias imagens
   upload.array('images'),
   uploadCarImagesController.handle
 );
