@@ -46,7 +46,6 @@ class RentalsRepository implements IRentalsRepository {
     return this.repository.findOne(rental_id);
   }
 
-  // com o relation conseguimos trazer as informações das tabela relacionadas
   async findByUser(user_id: string): Promise<Rental[]> {
     return this.repository.find({ where: { user_id }, relations: ['car'] });
   }

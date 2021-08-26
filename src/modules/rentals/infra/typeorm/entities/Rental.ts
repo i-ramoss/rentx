@@ -16,8 +16,8 @@ class Rental {
   @PrimaryColumn()
   id: string;
 
-  @ManyToOne(() => Car) // vão existir muitos aluguéis para um carro
-  @JoinColumn({ name: 'car_id' }) // referencia o objeto
+  @ManyToOne(() => Car)
+  @JoinColumn({ name: 'car_id' })
   car: Car;
 
   @Column()
