@@ -27,6 +27,7 @@
         "description": "Create a new car category",
         "operationId": "createCategory",
         "parameters": [],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -414,7 +415,7 @@
     },
     "/sessions": {
       "post": {
-        "tags": ["Account"],
+        "tags": ["Session"],
         "summary": "User authentication",
         "description": "Starts a session, authenticating the user and generating a temporary token for the user.",
         "operationId": "authenticateUser",
@@ -750,6 +751,13 @@
             "type": "string"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
