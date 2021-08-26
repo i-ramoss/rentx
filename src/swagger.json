@@ -246,7 +246,7 @@
         }
       }
     },
-    "/cars/specifications/:car_id": {
+    "/cars/specifications/{car_id}": {
       "patch": {
         "tags": ["Cars"],
         "summary": "Add a spec",
@@ -302,7 +302,7 @@
         "security": [{ "bearerAuth": [] }]
       }
     },
-    "/cars/images/:card_id": {
+    "/cars/images/{card_id}": {
       "post": {
         "tags": ["Cars"],
         "summary": "Upload car images.",
