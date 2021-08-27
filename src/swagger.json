@@ -63,7 +63,8 @@
               }
             }
           }
-        }
+        },
+        "security": [{ "bearerAuth": [] }]
       },
       "get": {
         "tags": ["Category"],
@@ -111,7 +112,8 @@
           "201": {
             "description": "The categories were imported successfully"
           }
-        }
+        },
+        "security": [{ "bearerAuth": [] }]
       }
     },
     "/specifications": {
@@ -157,7 +159,8 @@
               }
             }
           }
-        }
+        },
+        "security": [{ "bearerAuth": [] }]
       }
     },
     "/cars": {
@@ -218,7 +221,8 @@
               }
             }
           }
-        }
+        },
+        "security": [{ "bearerAuth": [] }]
       }
     },
     "/cars/available":{
@@ -242,7 +246,7 @@
         }
       }
     },
-    "/cars/specifications/:car_id": {
+    "/cars/specifications/{car_id}": {
       "patch": {
         "tags": ["Cars"],
         "summary": "Add a spec",
@@ -294,10 +298,11 @@
               }
             }
           }
-        }
+        },
+        "security": [{ "bearerAuth": [] }]
       }
     },
-    "/cars/images/:card_id": {
+    "/cars/images/{card_id}": {
       "post": {
         "tags": ["Cars"],
         "summary": "Upload car images.",
@@ -328,7 +333,8 @@
           "201": {
             "description": "The images were uploaded successfully"
           }
-        }
+        },
+        "security": [{ "bearerAuth": [] }]
       }
     },
     "/users": {
@@ -380,7 +386,8 @@
               }
             }
           }
-        }
+        },
+        "security": [{ "bearerAuth": [] }]
       }
     },
     "/users/avatar": {
@@ -409,12 +416,13 @@
           "201": {
             "description": "Image successfully added."
           }
-        }
+        },
+        "security": [{ "bearerAuth": [] }]
       }
     },
     "/sessions": {
       "post": {
-        "tags": ["Account"],
+        "tags": ["Session"],
         "summary": "User authentication",
         "description": "Starts a session, authenticating the user and generating a temporary token for the user.",
         "operationId": "authenticateUser",
@@ -479,7 +487,8 @@
               }
             }
           }
-        }
+        },
+        "security": [{ "bearerAuth": [] }]
       }
     }
   },
@@ -750,6 +759,13 @@
             "type": "string"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
