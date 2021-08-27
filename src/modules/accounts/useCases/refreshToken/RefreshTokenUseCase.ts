@@ -20,7 +20,7 @@ class RefreshTokenUseCase {
     private dateProvider: IDateProvider
   ) {}
 
-  async execute(token: string) {
+  async execute(token: string): Promise<string> {
     const { sub: user_id, email } = verify(token, auth.secret_refresh_token) as IPayload;
 
     const userToken = await this.usersTokensRepository.findByUserIdAndRefreshToken(user_id, token);
