@@ -50,44 +50,44 @@ describe('Create Rental', () => {
   });
 
   it('should not be able to create a new rental if the user already has one open', async () => {
-    expect(async () => {
-      await createRentalUseCase.execute({
+    await rentalsRepositoryInMemory.create({
+      car_id: '333333',
+      expected_return_date: dayAdd24Hours,
+      user_id: 'test',
+    });
+
+    await expect(
+      createRentalUseCase.execute({
         user_id: 'test',
         car_id: '121212',
         expected_return_date: dayAdd24Hours,
-      });
-
-      await createRentalUseCase.execute({
-        user_id: 'test',
-        car_id: '44444',
-        expected_return_date: dayAdd24Hours,
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      })
+    ).rejects.toEqual(new AppError('There is a rental in progress for user!'));
   });
 
   it('should not be able to create a new rental if the car already has one open', async () => {
-    expect(async () => {
-      await createRentalUseCase.execute({
-        user_id: '12345',
-        car_id: 'test',
-        expected_return_date: dayAdd24Hours,
-      });
+    await rentalsRepositoryInMemory.create({
+      car_id: '444444',
+      expected_return_date: dayAdd24Hours,
+      user_id: '12345',
+    });
 
-      await createRentalUseCase.execute({
+    await expect(
+      createRentalUseCase.execute({
         user_id: '54321',
-        car_id: 'test',
+        car_id: '444444',
         expected_return_date: dayAdd24Hours,
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      })
+    ).rejects.toEqual(new AppError('There is a rental in progress for car!'));
   });
 
   it('should not be able to create a new rental with invalid return time', async () => {
-    expect(async () => {
-      await createRentalUseCase.execute({
+    await expect(
+      createRentalUseCase.execute({
         user_id: '12345',
         car_id: 'test',
         expected_return_date: dayjs().toDate(),
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      })
+    ).rejects.toEqual(new AppError('Invalid return time!'));
   });
 });
