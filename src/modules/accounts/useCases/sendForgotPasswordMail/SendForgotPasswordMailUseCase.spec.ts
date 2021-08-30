@@ -47,4 +47,19 @@ describe('Send Forgot Password Mail', () => {
       new AppError('User does not exists!')
     );
   });
+
+  it('should be able to create an users token when sending email is called', async () => {
+    const generateTokenMail = spyOn(usersTokensRepositoryInMemory, 'create');
+
+    await usersRepositoryInMemory.create({
+      name: 'Bobby Lawson',
+      email: 'ziwnag@jaapel.ci',
+      password: '12345',
+      driver_license: '16750761',
+    });
+
+    await sendForgotPasswordMailUseCase.execute('ziwnag@jaapel.ci');
+
+    expect(generateTokenMail).toBeCalled();
+  });
 });
