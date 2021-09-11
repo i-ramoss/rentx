@@ -95,7 +95,7 @@ describe('Create Rental', () => {
       .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
 
     expect(response.status).toBe(400);
-    expect(response.text).toBe('{"message":"There is a rental in progress for user!"}');
+    expect(response.body).toEqual({ message: 'There is a rental in progress for user!' });
   });
 
   it('should not be able to create a new rental if the car already has one open', async () => {
@@ -113,7 +113,7 @@ describe('Create Rental', () => {
       .set({ Authorization: `Bearer ${responseUserToken.body.refresh_token}` });
 
     expect(response.status).toBe(400);
-    expect(response.text).toBe('{"message":"There is a rental in progress for car!"}');
+    expect(response.body).toEqual({ message: 'There is a rental in progress for car!' });
   });
 
   it('should not be able to create a new rental with invalid return time', async () => {
@@ -139,6 +139,6 @@ describe('Create Rental', () => {
       .set({ Authorization: `Bearer ${responseUserToken.body.refresh_token}` });
 
     expect(response.status).toBe(400);
-    expect(response.text).toBe('{"message":"Invalid return time!"}');
+    expect(response.body).toEqual({ message: 'Invalid return time!' });
   });
 });
