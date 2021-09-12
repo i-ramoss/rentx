@@ -10,6 +10,7 @@ interface IRequest {
   user_id: string;
   car_id: string;
   expected_return_date: Date;
+  start_date?: Date;
 }
 
 @injectable()
@@ -23,7 +24,7 @@ class CreateRentalUseCase {
     private carsRepository: ICarsRepository
   ) {}
 
-  async execute({ user_id, car_id, expected_return_date }: IRequest): Promise<Rental> {
+  async execute({ user_id, car_id, expected_return_date, start_date }: IRequest): Promise<Rental> {
     const minimumRentalHour = 24;
 
     const rentalOpenToCar = await this.rentalsRepository.findOpenRentalByCar(car_id);
@@ -32,7 +33,7 @@ class CreateRentalUseCase {
     if (rentalOpenToCar) throw new AppError('There is a rental in progress for car!');
     if (rentalOpenToUser) throw new AppError('There is a rental in progress for user!');
 
-    const dateNow = this.dateProvider.dateNow();
+    const dateNow = start_date || this.dateProvider.dateNow();
     const compare = this.dateProvider.compareInHours(dateNow, expected_return_date);
 
     if (compare < minimumRentalHour) throw new AppError('Invalid return time!');
