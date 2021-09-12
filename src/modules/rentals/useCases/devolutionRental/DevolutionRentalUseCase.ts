@@ -8,7 +8,6 @@ import { AppError } from '@shared/errors/AppError';
 
 interface IRequest {
   id: string;
-  user_id: string;
 }
 
 @injectable()
@@ -22,10 +21,10 @@ class DevolutionRentalUseCase {
     private dateProvider: IDateProvider
   ) {}
 
-  async execute({ id, user_id }: IRequest): Promise<Rental> {
+  async execute({ id }: IRequest): Promise<Rental> {
     const rental = await this.rentalsRepository.findById(id);
 
-    if (!rental) throw new AppError('Retal not found!');
+    if (!rental) throw new AppError('Rental not found!');
 
     const car = await this.carsRepository.findById(rental.car_id);
 
