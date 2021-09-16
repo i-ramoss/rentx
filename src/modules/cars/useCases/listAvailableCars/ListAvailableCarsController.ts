@@ -5,14 +5,12 @@ import { ListAvailableCarsUseCase } from './ListAvailableCarsUseCase';
 
 class ListAvailableCarsController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { brand, category_id } = request.query;
-
-    const [name] = String(request.query.name).split(',');
+    const { name, brand, category_id } = request.query;
 
     const listAvailableCarsUseCase = container.resolve(ListAvailableCarsUseCase);
 
     const cars = await listAvailableCarsUseCase.execute({
-      name,
+      name: name as string,
       brand: brand as string,
       category_id: category_id as string,
     });

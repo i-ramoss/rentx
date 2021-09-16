@@ -87,7 +87,7 @@ describe('List Available Cars', () => {
     const response = await request(app).get('/cars/available');
 
     expect(response.status).toBe(200);
-    // expect(response.body).toEqual(expect.arrayContaining([carTest]));
+    expect(response.body.length).toBe(3);
   });
 
   it('should be able to list all available cars by name', async () => {
@@ -95,9 +95,9 @@ describe('List Available Cars', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(1);
-    // expect(response.body).toEqual(
-    //   expect.arrayContaining([expect.objectContaining({ name: 'Audi 1' })])
-    // );
+    expect(response.body).toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: 'Audi A1' })])
+    );
   });
 
   it('should be able to list all available cars by brand', async () => {
@@ -105,6 +105,9 @@ describe('List Available Cars', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(3);
+    expect(response.body).toEqual(
+      expect.arrayContaining([expect.objectContaining({ brand: 'Audi' })])
+    );
   });
 
   it('should be able to list all available cars by category id', async () => {
@@ -114,5 +117,10 @@ describe('List Available Cars', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(3);
+    expect(response.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ category_id: `${responseCategory.body.id}` }),
+      ])
+    );
   });
 });
