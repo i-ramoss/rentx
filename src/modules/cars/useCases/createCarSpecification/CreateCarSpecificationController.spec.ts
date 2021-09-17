@@ -73,4 +73,14 @@ describe('Create car specification', () => {
 
     expect(response.status).toBe(200);
   });
+
+  it('should not be able to add a spec to a non-existent car', async () => {
+    const response = await request(app)
+      .patch(`/cars/specifications/${uuidV4()}`)
+      .send({ specifications_id: [responseCar.body.id] })
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ message: 'Car doest not exists!' });
+  });
 });
