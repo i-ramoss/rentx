@@ -1,4 +1,3 @@
-import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { UsersRepositoryInMemory } from '@modules/accounts/repositories/in-memory/UsersRepositoryInMemory';
 import { UsersTokensRepositoryInMemory } from '@modules/accounts/repositories/in-memory/UsersTokensRepositoryInMemory';
 import { DayJsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayJsDateProvider';
@@ -27,27 +26,32 @@ describe('Authenticate User', () => {
   });
 
   it('should be able to authenticate a user', async () => {
-    const user: ICreateUserDTO = {
+    await createUserUseCase.execute({
       name: 'User Test',
       email: 'user@test.com',
       password: '000',
       driver_license: '123456',
-    };
-
-    await createUserUseCase.execute(user);
+    });
 
     const result = await authenticateUserUseCase.execute({
-      email: user.email,
-      password: user.password,
+      email: 'user@test.com',
+      password: '000',
     });
 
     expect(result).toHaveProperty('user');
     expect(result).toHaveProperty('token');
     expect(result).toHaveProperty('refresh_token');
-    expect(result.user.email).toEqual(user.email);
+    expect(result.user.email).toEqual('user@test.com');
   });
 
   it('should not be able to authenticate a none existent user', async () => {
+    await createUserUseCase.execute({
+      name: 'User Test',
+      email: 'user@test.com',
+      password: '000',
+      driver_license: '123456',
+    });
+
     await expect(
       authenticateUserUseCase.execute({
         email: 'false@email.com',
@@ -57,18 +61,16 @@ describe('Authenticate User', () => {
   });
 
   it('should not be able to authenticate a user with incorrect password', async () => {
-    const user: ICreateUserDTO = {
+    await createUserUseCase.execute({
       name: 'User Test Error',
       email: 'user@test.com',
       password: '000',
       driver_license: '123456',
-    };
-
-    await createUserUseCase.execute(user);
+    });
 
     await expect(
       authenticateUserUseCase.execute({
-        email: user.email,
+        email: 'user@test.com',
         password: 'incorrectPassword',
       })
     ).rejects.toEqual(new AppError('Email or password incorrect!'));
