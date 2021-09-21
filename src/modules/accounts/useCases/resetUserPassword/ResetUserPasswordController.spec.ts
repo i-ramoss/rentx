@@ -56,6 +56,10 @@ describe('Reset user password', () => {
   });
 
   it('should not be able to reset a password for an user expired token', async () => {
+    responseUserToken = await request(app)
+      .post('/sessions')
+      .send({ email: 'user@test.com.br', password: 'new-password' });
+
     const response = await request(app)
       .post(`/password/reset?token=${responseUserToken.body.refresh_token}`)
       .send({ password: 'password', date_now: dayjs().add(100, 'days').toDate() });
