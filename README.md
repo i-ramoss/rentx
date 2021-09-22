@@ -56,8 +56,11 @@ $ cd RentX
 # Install the dependencies:
 $ yarn
 
-# Start the server:
-$ yarn  dev
+# Start the server and the database:
+$ docker-compose start
+
+# Run the migrations
+$ yarn typeorm migrations:run
 
 # The server is running at port 3333 (http://localhost:3333/)
 ```
