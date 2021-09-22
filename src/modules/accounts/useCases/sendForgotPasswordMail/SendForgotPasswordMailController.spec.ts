@@ -32,4 +32,13 @@ describe('Send forgot password mail', () => {
 
     expect(response.status).toBe(200);
   });
+
+  it('should not be able to send a forgot password mail to a non-existent user', async () => {
+    const response = await request(app)
+      .post('/password/forgot')
+      .send({ email: 'non-existent@email.com.br' });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ message: 'User does not exists!' });
+  });
 });
