@@ -3,12 +3,13 @@ import { Connection } from 'typeorm';
 
 import { app } from '@shared/infra/http/app';
 import createConnection from '@shared/infra/typeorm';
+import { fileMethods } from '@utils/file';
 
 let connection: Connection;
 
 let responseUserToken: Response;
 
-const testFile = `${__dirname}/../../../../../assets/profile01.jpg`;
+const testFile = `./assets/profile01.jpg`;
 
 describe('Update user avatar', () => {
   beforeAll(async () => {
@@ -39,6 +40,8 @@ describe('Update user avatar', () => {
       .set({ Authorization: `Bearer ${responseUserToken.body.refresh_token}` })
       .attach('avatar', testFile);
 
-    expect(response.status).toBe(204);
+    await fileMethods.deleteFile(`./tmp/avatar/${response.body}`);
+
+    expect(response.status).toBe(200);
   });
 });

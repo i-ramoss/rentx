@@ -12,7 +12,7 @@ class UpdateUserAvatarController {
 
     await updateUserAvatarUseCase.execute({ user_id, avatar_file });
 
-    return response.status(204).send();
+    return response.status(200).json(avatar_file);
   }
 }
 
