@@ -9,9 +9,7 @@ import { ensureAuthenticated } from '@shared/infra/http/middlewares/ensureAuthen
 
 const categoriesRoutes = Router();
 
-const upload = multer({
-  dest: './tmp',
-});
+const upload = multer({ dest: './tmp' });
 
 const createCategoryController = new CreateCategoryController();
 const importCategoryController = new ImportCategoryController();
