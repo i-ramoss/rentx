@@ -3,6 +3,7 @@ import fs from 'fs';
 import { inject, injectable } from 'tsyringe';
 
 import { ICategoriesRepository } from '@modules/cars/repositories/ICategoriesRepository';
+import { AppError } from '@shared/errors/AppError';
 
 interface IImportCategory {
   name: string;
@@ -45,6 +46,8 @@ class ImportCategoryUseCase {
 
   async execute(file: Express.Multer.File): Promise<void> {
     const categories = await this.loadCategories(file);
+
+    if (file.mimetype !== 'text/csv') throw new AppError('Invalid format file');
 
     categories.map(async category => {
       const { name, description } = category;
