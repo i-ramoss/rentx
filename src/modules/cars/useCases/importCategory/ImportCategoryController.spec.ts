@@ -11,6 +11,8 @@ let connection: Connection;
 let responseAdminUserToken: Response;
 
 const csv_file_test = './assets/categories01.csv';
+const invalid_file_test = './assets/invalid_categories.pdf';
+const invalid_csv_file = './assets/invalid_csv_file.csv';
 
 describe('Import categories', () => {
   beforeAll(async () => {
@@ -60,5 +62,24 @@ describe('Import categories', () => {
       .attach('file', csv_file_test);
 
     expect(response.status).toBe(200);
+  });
+
+  it('should not be able to import categories from an invalid format file', async () => {
+    const response = await request(app)
+      .post('/categories/import')
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` })
+      .attach('file', invalid_file_test);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ message: 'Invalid format file' });
+  });
+
+  it('should not be able to import categories from an invalid csv file', async () => {
+    const response = await request(app)
+      .post('/categories/import')
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` })
+      .attach('file', invalid_csv_file);
+
+    expect(response.status).toBe(500);
   });
 });
