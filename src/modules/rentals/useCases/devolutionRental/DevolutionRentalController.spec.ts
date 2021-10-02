@@ -45,7 +45,7 @@ describe('Devolution a Rental', () => {
       `
     );
 
-    dayAdd24Hours = dayjs().add(1, 'day').toDate();
+    dayAdd24Hours = dayjs().add(25, 'h').toDate();
     dayBeforeYesterday = dayjs().subtract(3, 'day').toDate();
     yesterday = dayjs().subtract(1, 'day').toDate();
 

@@ -64,7 +64,7 @@ describe('Create Rental', () => {
       .send({ ...carTest, license_plate: '81062954', category_id: `${responseCategory.body.id}` })
       .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
 
-    dayAdd24Hours = dayjs().add(1, 'day').toDate();
+    dayAdd24Hours = dayjs().add(25, 'h').toDate();
   });
 
   afterAll(async () => {

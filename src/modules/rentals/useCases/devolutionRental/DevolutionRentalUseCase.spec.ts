@@ -17,7 +17,7 @@ let dayJsDateProvider: IDateProvider;
 let devolutionRentalUseCase: DevolutionRentalUseCase;
 
 describe('Devolution a Rental', () => {
-  const dayAdd24Hours = dayjs().add(1, 'day').toDate();
+  const dayAdd24Hours = dayjs().add(25, 'h').toDate();
 
   const carTest: ICreateCarDTO = {
     name: 'Car Test',

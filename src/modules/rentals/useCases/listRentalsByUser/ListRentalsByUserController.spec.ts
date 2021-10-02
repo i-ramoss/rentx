@@ -41,7 +41,7 @@ describe('List rentals by user', () => {
       `
     );
 
-    const dayAdd24Hours = dayjs().add(1, 'day').toDate();
+    const dayAdd24Hours = dayjs().add(25, 'h').toDate();
 
     responseAdminUserToken = await request(app)
       .post('/sessions')
