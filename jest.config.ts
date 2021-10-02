@@ -4,7 +4,6 @@ import { pathsToModuleNameMapper } from 'ts-jest/utils';
 import { compilerOptions } from './tsconfig.json';
 
 export default {
-  testTimeout: 30000,
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
