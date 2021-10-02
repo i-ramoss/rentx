@@ -62,7 +62,7 @@ describe('Reset user password', () => {
 
     const response = await request(app)
       .post(`/password/reset?token=${responseUserToken.body.refresh_token}`)
-      .send({ password: 'password', date_now: dayjs().add(100, 'days').toDate() });
+      .send({ password: 'password', date_now: dayjs().add(100, 'day').toDate() });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: 'Token expired' });
