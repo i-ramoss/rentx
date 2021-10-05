@@ -1,5 +1,5 @@
 import { hash } from 'bcryptjs';
-import request from 'supertest';
+import request, { Response } from 'supertest';
 import { Connection } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
@@ -7,6 +7,8 @@ import { app } from '@shared/infra/http/app';
 import createConnection from '@shared/infra/typeorm';
 
 let connection: Connection;
+
+let responseAdminUserToken: Response;
 
 describe('List Categories', () => {
   beforeAll(async () => {
@@ -23,6 +25,11 @@ describe('List Categories', () => {
         values('${id}', 'admin', 'admin@rentx.com.br', '${password}', true, 'now()', 'xxxxxx')
       `
     );
+
+    responseAdminUserToken = await request(app).post('/sessions').send({
+      email: 'admin@rentx.com.br',
+      password: 'admin',
+    });
   });
 
   afterAll(async () => {
@@ -31,17 +38,10 @@ describe('List Categories', () => {
   });
 
   it('should be able to list all registered categories', async () => {
-    const responseToken = await request(app).post('/sessions').send({
-      email: 'admin@rentx.com.br',
-      password: 'admin',
-    });
-
-    const { refresh_token } = responseToken.body;
-
     await request(app)
       .post('/categories')
       .send({ name: 'Category Supertest', description: 'Category Supertest description' })
-      .set({ Authorization: `Bearer ${refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     const response = await request(app).get('/categories');
 

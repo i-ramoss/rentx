@@ -49,7 +49,7 @@ describe('Refresh token', () => {
 
     const refreshToken = await refreshTokenUseCase.execute(refresh_token);
 
-    expect(typeof refreshToken).toBe('string');
+    expect(typeof refreshToken).toBe('object');
   });
 
   it('should not be able to create a refresh token for a invalid user token', async () => {

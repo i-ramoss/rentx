@@ -44,9 +44,9 @@ describe('Reset user password', () => {
   });
 
   it('should not be able to reset a password for an invalid token', async () => {
-    const invalidToken = sign({}, auth.secret_refresh_token, {
+    const invalidToken = sign({}, auth.secret_token, {
       subject: uuidV4(),
-      expiresIn: auth.expires_in_refresh_token,
+      expiresIn: auth.expires_in_token,
     });
 
     const response = await request(app).post(`/password/reset?token=${invalidToken}`);
