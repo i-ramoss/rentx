@@ -40,7 +40,7 @@ describe('Create Specification', () => {
     const response = await request(app)
       .post('/specifications')
       .send({ name: 'Specification Test', description: 'Specification Test description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(201);
   });
@@ -49,7 +49,7 @@ describe('Create Specification', () => {
     const response = await request(app)
       .post('/specifications')
       .send({ name: 'Specification Test', description: 'Specification Test description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: 'Specification already Exists!' });

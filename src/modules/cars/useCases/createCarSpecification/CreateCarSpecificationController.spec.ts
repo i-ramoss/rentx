@@ -47,17 +47,17 @@ describe('Create car specification', () => {
     responseCategory = await request(app)
       .post('/categories')
       .send({ name: 'Category Supertest', description: 'Category Supertest description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     responseCar = await request(app)
       .post('/cars')
       .send({ ...carTest, license_plate: '57788935', category_id: responseCategory.body.id })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     responseSpecification = await request(app)
       .post('/specifications')
       .send({ name: 'Specification Test', description: 'Specification Test description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
   });
 
   afterAll(async () => {
@@ -69,7 +69,7 @@ describe('Create car specification', () => {
     const response = await request(app)
       .patch(`/cars/specifications/${responseCar.body.id}`)
       .send({ specifications_id: [responseSpecification.body.id] })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(200);
   });
@@ -78,7 +78,7 @@ describe('Create car specification', () => {
     const response = await request(app)
       .patch(`/cars/specifications/${uuidV4()}`)
       .send({ specifications_id: [responseCar.body.id] })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: 'Car doest not exists!' });

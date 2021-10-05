@@ -57,12 +57,12 @@ describe('Create Rental', () => {
     responseCategory = await request(app)
       .post('/categories')
       .send({ name: 'Category Supertest', description: 'Category Supertest description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     responseCar = await request(app)
       .post('/cars')
       .send({ ...carTest, license_plate: '81062954', category_id: `${responseCategory.body.id}` })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     dayAdd24Hours = dayjs().add(25, 'h').toDate();
   });
@@ -76,7 +76,7 @@ describe('Create Rental', () => {
     const response = await request(app)
       .post('/rentals')
       .send({ car_id: `${responseCar.body.id}`, expected_return_date: dayAdd24Hours })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('id');
@@ -87,12 +87,12 @@ describe('Create Rental', () => {
     const responseCar02 = await request(app)
       .post('/cars')
       .send({ ...carTest, license_plate: '41402126', category_id: `${responseCategory.body.id}` })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     const response = await request(app)
       .post('/rentals')
       .send({ car_id: `${responseCar02.body.id}`, expected_return_date: dayAdd24Hours })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: 'There is a rental in progress for user!' });
@@ -110,7 +110,7 @@ describe('Create Rental', () => {
     const response = await request(app)
       .post('/rentals')
       .send({ car_id: `${responseCar.body.id}`, expected_return_date: dayAdd24Hours })
-      .set({ Authorization: `Bearer ${responseUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseUserToken.body.token}` });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: 'There is a rental in progress for car!' });
@@ -120,7 +120,7 @@ describe('Create Rental', () => {
     const responseCar03 = await request(app)
       .post('/cars')
       .send({ ...carTest, license_plate: '76211213', category_id: `${responseCategory.body.id}` })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     await request(app)
       .post('/users')
@@ -136,7 +136,7 @@ describe('Create Rental', () => {
         car_id: `${responseCar03.body.id}`,
         expected_return_date: '2020-08-30T12:48:31.696Z',
       })
-      .set({ Authorization: `Bearer ${responseUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseUserToken.body.token}` });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: 'Invalid return time!' });

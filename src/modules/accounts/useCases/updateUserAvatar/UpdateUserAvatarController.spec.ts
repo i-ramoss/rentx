@@ -37,7 +37,7 @@ describe('Update user avatar', () => {
   it('should be able to add a user avatar', async () => {
     const response = await request(app)
       .patch('/users/avatar')
-      .set({ Authorization: `Bearer ${responseUserToken.body.refresh_token}` })
+      .set({ Authorization: `Bearer ${responseUserToken.body.token}` })
       .attach('avatar', testFile);
 
     await fileMethods.deleteFile(`./tmp/avatar/${response.body}`);

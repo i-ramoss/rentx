@@ -46,7 +46,7 @@ describe('Create a car', () => {
     responseCategory = await request(app)
       .post('/categories')
       .send({ name: 'Category Supertest', description: 'Category Supertest description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
   });
 
   afterAll(async () => {
@@ -58,7 +58,7 @@ describe('Create a car', () => {
     const response = await request(app)
       .post('/cars')
       .send({ ...carTest, license_plate: '12464388', category_id: responseCategory.body.id })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('id');
@@ -69,7 +69,7 @@ describe('Create a car', () => {
     const response = await request(app)
       .post('/cars')
       .send({ ...carTest, license_plate: '12464388', category_id: responseCategory.body.id })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: 'Car already exists!' });
@@ -79,7 +79,7 @@ describe('Create a car', () => {
     const response = await request(app)
       .post('/cars')
       .send({ ...carTest, license_plate: '96051555', category_id: responseCategory.body.id })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.body.available).toBe(true);
   });
