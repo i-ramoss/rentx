@@ -31,9 +31,9 @@ This back-end project was developed using the following technologies:
 
 - [Typescript][typescript]
 - [Node.js][nodejs]
-- [Express][express]
+- [Docker][docker]
 - [PostgreSQL][postgresql]
-- [Multer][multer]
+- [JEST][jest]
 - [Swagger UI][swagger]
 
 
@@ -56,18 +56,37 @@ $ cd RentX
 # Install the dependencies:
 $ yarn
 
-# Start the server:
-$ yarn  dev
+# Create the app containers:
+$ docker-compose up -d
+
+# Start the server and the database:
+$ docker-compose start
+
+# Run the migrations:
+$ yarn typeorm migrations:run
 
 # The server is running at port 3333 (http://localhost:3333/)
+
+# To stop the server and database:
+$ docker-compose stop
 ```
 
+### 🧪 Run the tests:
+```bash
+$ yarn test
+
+# The coverage reports can be seen by going to /coverage/lcov-report/index.html and opening this html file in your browser. 
+```
 
 ## :books: Documentation:
 All API endpoints have been documented using Swagger. To view just access the URL below or click on this [link](http://localhost:3333/api-docs). <br>
 *Remember to start the server first*
 
 *http://localhost:3333/api-docs* 
+
+
+## 📌 Project requeriments:
+All rules for this API can be found on this [link](./docs/requeriments_en.md).
 
 
 ## :confetti_ball: How to contribute:
@@ -102,6 +121,7 @@ Feel free to bring new features or fix problems, it will be a pleasure! 💜
 [swagger]: https://swagger.io/
 [git]: https://git-scm.com
 [docker]: https://www.docker.com/
+[jest]: https://jestjs.io/
 
 [license]: https://github.com/i-ramoss/Foodfy/blob/master/LICENSE
 [linkedin]: https://www.linkedin.com/in/ian-ramos/

@@ -9,6 +9,7 @@ import { AppError } from '@shared/errors/AppError';
 interface IRequest {
   token: string;
   password: string;
+  date_now?: Date;
 }
 
 @injectable()
@@ -22,12 +23,14 @@ class ResetUserPasswordUseCase {
     private dateProvider: IDateProvider
   ) {}
 
-  async execute({ token, password }: IRequest): Promise<void> {
+  async execute({ token, password, date_now }: IRequest): Promise<void> {
     const userToken = await this.usersTokensRepository.findByRefreshToken(token);
 
     if (!userToken) throw new AppError('Invalid Token!');
 
-    if (this.dateProvider.compareIfBefore(userToken.expires_date, this.dateProvider.dateNow()))
+    const dateNow = date_now || this.dateProvider.dateNow();
+
+    if (this.dateProvider.compareIfBefore(userToken.expires_date, dateNow))
       throw new AppError('Token expired');
 
     const user = await this.usersRepository.findById(userToken.user_id);
