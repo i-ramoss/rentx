@@ -29,6 +29,7 @@ class RentalsRepository implements IRentalsRepository {
     user_id,
     car_id,
     end_date,
+    start_date,
     expected_return_date,
     total,
   }: ICreateRentalDTO): Promise<Rental> {
@@ -37,6 +38,7 @@ class RentalsRepository implements IRentalsRepository {
       user_id,
       car_id,
       end_date,
+      start_date,
       expected_return_date,
       total,
     });

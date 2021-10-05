@@ -23,9 +23,9 @@ describe('Devolution a Rental', () => {
   const carTest: ICreateCarDTO = {
     name: 'Car Test',
     description: 'Car Test description',
-    daily_rate: 67,
+    daily_rate: 50,
     license_plate: '',
-    fine_amount: 192,
+    fine_amount: 100,
     brand: 'Rosie Collier',
     category_id: '',
   };
@@ -46,7 +46,7 @@ describe('Devolution a Rental', () => {
     );
 
     dayAdd24Hours = dayjs().add(25, 'h').toDate();
-    dayBeforeYesterday = dayjs().subtract(3, 'day').toDate();
+    dayBeforeYesterday = dayjs().subtract(2, 'day').toDate();
     yesterday = dayjs().subtract(1, 'day').toDate();
 
     responseAdminUserToken = await request(app)
@@ -62,11 +62,6 @@ describe('Devolution a Rental', () => {
       .post('/cars')
       .send({ ...carTest, license_plate: '81062954', category_id: `${responseCategory.body.id}` })
       .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
-
-    responseRental = await request(app)
-      .post('/rentals')
-      .send({ car_id: responseCar.body.id, expected_return_date: dayAdd24Hours })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
   });
 
   afterAll(async () => {
@@ -75,6 +70,11 @@ describe('Devolution a Rental', () => {
   });
 
   it('should be able to return a rent', async () => {
+    responseRental = await request(app)
+      .post('/rentals')
+      .send({ car_id: responseCar.body.id, expected_return_date: dayAdd24Hours })
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+
     const response = await request(app)
       .post(`/rentals/devolution/${responseRental.body.id}`)
       .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
@@ -82,6 +82,7 @@ describe('Devolution a Rental', () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('total');
     expect(response.body).toHaveProperty('end_date');
+    expect(response.body.total).toBe(50);
     expect(responseCar.body.available).toBe(true);
   });
 
@@ -109,5 +110,6 @@ describe('Devolution a Rental', () => {
       .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
 
     expect(response.status).toBe(200);
+    expect(response.body.total).toBe(200);
   });
 });
