@@ -4,9 +4,9 @@ import { Connection } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
 import { ICreateCarDTO } from '@modules/cars/dtos/ICreateCarDTO';
+import { LocalStorageProvider } from '@shared/container/providers/StorageProvider/implementations/LocalStorageProvider';
 import { app } from '@shared/infra/http/app';
 import createConnection from '@shared/infra/typeorm';
-import { fileMethods } from '@utils/file';
 
 let connection: Connection;
 
@@ -16,6 +16,8 @@ let responseCar: Response;
 
 const carImage01 = `./assets/car_image01.jpg`;
 const carImage02 = `./assets/car_image02.jpg`;
+
+const localStorageProvider = new LocalStorageProvider();
 
 describe('Upload car images', () => {
   const carTest: ICreateCarDTO = {
@@ -75,9 +77,11 @@ describe('Upload car images', () => {
       .attach('images', carImage01)
       .attach('images', carImage02);
 
-    response.body.map(async (image: string) => {
-      await fileMethods.deleteFile(`./tmp/cars/${image}`);
-    });
+    await Promise.all(
+      response.body.map(async (image: string) => {
+        await localStorageProvider.delete(image, 'cars');
+      })
+    );
 
     expect(response.status).toBe(201);
   });
