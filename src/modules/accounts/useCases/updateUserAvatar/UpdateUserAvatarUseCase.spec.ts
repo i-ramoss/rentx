@@ -1,15 +1,20 @@
+import fs from 'fs';
+import path from 'path';
+
 import { UsersRepositoryInMemory } from '@modules/accounts/repositories/in-memory/UsersRepositoryInMemory';
-import { fileMethods } from '@utils/file';
+import { LocalStorageProvider } from '@shared/container/providers/StorageProvider/implementations/LocalStorageProvider';
 
 import { UpdateUserAvatarUseCase } from './UpdateUserAvatarUseCase';
 
 let usersRepositoryInMemory: UsersRepositoryInMemory;
+let storageProvider: LocalStorageProvider;
 let updateUserAvatarUseCase: UpdateUserAvatarUseCase;
 
 describe('Update user avatar', () => {
   beforeEach(() => {
     usersRepositoryInMemory = new UsersRepositoryInMemory();
-    updateUserAvatarUseCase = new UpdateUserAvatarUseCase(usersRepositoryInMemory);
+    storageProvider = new LocalStorageProvider();
+    updateUserAvatarUseCase = new UpdateUserAvatarUseCase(usersRepositoryInMemory, storageProvider);
   });
 
   it('should be able to add a user avatar', async () => {
@@ -20,11 +25,14 @@ describe('Update user avatar', () => {
       driver_license: 'xxxxxx',
     });
 
-    const avatar_file = 'profile.png';
+    const avatarPath = path.resolve('assets/profile01.jpg');
+    const tmpPath = path.resolve('tmp/profile01.jpg');
+
+    await fs.promises.copyFile(avatarPath, tmpPath);
 
     const updateUserAvatar = spyOn(usersRepositoryInMemory, 'create');
 
-    await updateUserAvatarUseCase.execute({ user_id, avatar_file });
+    await updateUserAvatarUseCase.execute({ user_id, avatar_file: path.basename(avatarPath) });
 
     expect(updateUserAvatar).toHaveBeenCalled();
   });
@@ -37,14 +45,26 @@ describe('Update user avatar', () => {
       driver_license: 'xxxxxx',
     });
 
-    const deleteOlderImageFile = spyOn(fileMethods, 'deleteFile');
+    const first_avatar_path = path.resolve('assets/profile01.jpg');
+    const second_avatar_path = path.resolve('assets/profile02.jpg');
 
-    const first_avatar_file = 'profile01.png';
-    const second_avatar_file = 'profile02.png';
+    const tmpPath01 = path.resolve('tmp/profile01.jpg');
+    const tmpPath02 = path.resolve('tmp/profile02.jpg');
 
-    await updateUserAvatarUseCase.execute({ user_id: user.id, avatar_file: first_avatar_file });
+    await fs.promises.copyFile(first_avatar_path, tmpPath01);
+    await fs.promises.copyFile(second_avatar_path, tmpPath02);
 
-    await updateUserAvatarUseCase.execute({ user_id: user.id, avatar_file: second_avatar_file });
+    const deleteOlderImageFile = spyOn(storageProvider, 'delete');
+
+    await updateUserAvatarUseCase.execute({
+      user_id: user.id,
+      avatar_file: path.basename(first_avatar_path),
+    });
+
+    await updateUserAvatarUseCase.execute({
+      user_id: user.id,
+      avatar_file: path.basename(second_avatar_path),
+    });
 
     expect(deleteOlderImageFile).toHaveBeenCalled();
   });
