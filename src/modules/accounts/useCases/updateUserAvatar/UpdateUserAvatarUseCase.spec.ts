@@ -7,14 +7,17 @@ import { LocalStorageProvider } from '@shared/container/providers/StorageProvide
 import { UpdateUserAvatarUseCase } from './UpdateUserAvatarUseCase';
 
 let usersRepositoryInMemory: UsersRepositoryInMemory;
-let storageProvider: LocalStorageProvider;
+let localStorageProvider: LocalStorageProvider;
 let updateUserAvatarUseCase: UpdateUserAvatarUseCase;
 
 describe('Update user avatar', () => {
   beforeEach(() => {
     usersRepositoryInMemory = new UsersRepositoryInMemory();
-    storageProvider = new LocalStorageProvider();
-    updateUserAvatarUseCase = new UpdateUserAvatarUseCase(usersRepositoryInMemory, storageProvider);
+    localStorageProvider = new LocalStorageProvider();
+    updateUserAvatarUseCase = new UpdateUserAvatarUseCase(
+      usersRepositoryInMemory,
+      localStorageProvider
+    );
   });
 
   it('should be able to add a user avatar', async () => {
@@ -34,11 +37,13 @@ describe('Update user avatar', () => {
 
     await updateUserAvatarUseCase.execute({ user_id, avatar_file: path.basename(avatarPath) });
 
+    await localStorageProvider.delete(path.basename(avatarPath), 'avatar');
+
     expect(updateUserAvatar).toHaveBeenCalled();
   });
 
   it('should be able to remove the users old avatar, and replace it with the new', async () => {
-    const user = await usersRepositoryInMemory.create({
+    const { id: user_id } = await usersRepositoryInMemory.create({
       name: 'User test',
       email: 'user@test.com',
       password: '0000',
@@ -54,15 +59,15 @@ describe('Update user avatar', () => {
     await fs.promises.copyFile(first_avatar_path, tmpPath01);
     await fs.promises.copyFile(second_avatar_path, tmpPath02);
 
-    const deleteOlderImageFile = spyOn(storageProvider, 'delete');
-
     await updateUserAvatarUseCase.execute({
-      user_id: user.id,
+      user_id,
       avatar_file: path.basename(first_avatar_path),
     });
 
+    const deleteOlderImageFile = spyOn(localStorageProvider, 'delete');
+
     await updateUserAvatarUseCase.execute({
-      user_id: user.id,
+      user_id,
       avatar_file: path.basename(second_avatar_path),
     });
 
