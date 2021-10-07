@@ -13,6 +13,7 @@
   "dependencies": {
     "aws-sdk": "^2.1001.0",
     "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.4.0",
     "csv-parse": "^4.15.3",
     "dayjs": "^1.10.6",
     "dotenv": "^10.0.0",
