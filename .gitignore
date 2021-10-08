@@ -11,4 +11,11 @@ coverage
 dist
 
 # Local
-tmp
+tmp/**
+!tmp/avatar
+!tmp/avatar/.gitkeep
+!tmp/cars
+!tmp/cars/.gitkeep
+
+# Database
+ormconfig.json
