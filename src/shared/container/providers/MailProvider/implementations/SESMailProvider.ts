@@ -1,5 +1,5 @@
-import fs from 'fs';
 import { SES } from 'aws-sdk';
+import fs from 'fs';
 import handlebars from 'handlebars';
 import nodemailer, { Transporter } from 'nodemailer';
 import { injectable } from 'tsyringe';
@@ -18,10 +18,10 @@ class SESMailProvider implements IMailProvider {
     try {
       this.client = nodemailer.createTransport({
         SES: new SES({
-          apiVersion: "2010-12-01",
+          apiVersion: '2010-12-01',
           region: process.env.AWS_REGION,
         }),
-      })
+      });
     } catch (err) {
       console.error(`SESMailProvider - Error:\n${err}`);
     }
