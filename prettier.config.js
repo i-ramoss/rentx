@@ -1,3 +1,5 @@
-export const singleQuote = true;
-export const arrowParens = 'avoid';
-export const printWidth = 100;
+module.exports = {
+  singleQuote: true,
+  arrowParens: 'avoid',
+  printWidth: 100
+}; 
