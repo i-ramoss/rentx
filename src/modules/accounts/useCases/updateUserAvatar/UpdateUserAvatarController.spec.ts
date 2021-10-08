@@ -1,13 +1,15 @@
 import request, { Response } from 'supertest';
 import { Connection } from 'typeorm';
 
+import { LocalStorageProvider } from '@shared/container/providers/StorageProvider/implementations/LocalStorageProvider';
 import { app } from '@shared/infra/http/app';
 import createConnection from '@shared/infra/typeorm';
-import { fileMethods } from '@utils/file';
 
 let connection: Connection;
 
 let responseUserToken: Response;
+
+const localStorageProvider = new LocalStorageProvider();
 
 const testFile = `./assets/profile01.jpg`;
 
@@ -37,10 +39,10 @@ describe('Update user avatar', () => {
   it('should be able to add a user avatar', async () => {
     const response = await request(app)
       .patch('/users/avatar')
-      .set({ Authorization: `Bearer ${responseUserToken.body.refresh_token}` })
+      .set({ Authorization: `Bearer ${responseUserToken.body.token}` })
       .attach('avatar', testFile);
 
-    await fileMethods.deleteFile(`./tmp/avatar/${response.body}`);
+    await localStorageProvider.delete(response.body, 'avatar');
 
     expect(response.status).toBe(200);
   });

@@ -56,12 +56,12 @@ describe('Devolution a Rental', () => {
     responseCategory = await request(app)
       .post('/categories')
       .send({ name: 'Category Supertest', description: 'Category Supertest description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     responseCar = await request(app)
       .post('/cars')
       .send({ ...carTest, license_plate: '81062954', category_id: `${responseCategory.body.id}` })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
   });
 
   afterAll(async () => {
@@ -73,11 +73,11 @@ describe('Devolution a Rental', () => {
     responseRental = await request(app)
       .post('/rentals')
       .send({ car_id: responseCar.body.id, expected_return_date: dayAdd24Hours })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     const response = await request(app)
       .post(`/rentals/devolution/${responseRental.body.id}`)
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('total');
@@ -89,7 +89,7 @@ describe('Devolution a Rental', () => {
   it('should not be able to return a non-existent rent', async () => {
     const response = await request(app)
       .post(`/rentals/devolution/${uuidV4()}`)
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.body).toEqual({ message: 'Rental not found!' });
     expect(response.status).toBe(400);
@@ -103,11 +103,11 @@ describe('Devolution a Rental', () => {
         expected_return_date: yesterday,
         start_date: dayBeforeYesterday,
       })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     const response = await request(app)
       .post(`/rentals/devolution/${responseRental.body.id}`)
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(200);
     expect(response.body.total).toBe(200);

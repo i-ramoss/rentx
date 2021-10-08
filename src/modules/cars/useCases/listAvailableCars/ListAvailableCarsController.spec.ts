@@ -45,7 +45,7 @@ describe('List Available Cars', () => {
     responseCategory = await request(app)
       .post('/categories')
       .send({ name: 'Category Test', description: 'Category Test description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     await request(app)
       .post('/cars')
@@ -55,7 +55,7 @@ describe('List Available Cars', () => {
         license_plate: '98568211',
         category_id: `${responseCategory.body.id}`,
       })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     await request(app)
       .post('/cars')
@@ -65,7 +65,7 @@ describe('List Available Cars', () => {
         license_plate: '30297279',
         category_id: `${responseCategory.body.id}`,
       })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     await request(app)
       .post('/cars')
@@ -75,7 +75,7 @@ describe('List Available Cars', () => {
         license_plate: '19511951',
         category_id: `${responseCategory.body.id}`,
       })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
   });
 
   afterAll(async () => {

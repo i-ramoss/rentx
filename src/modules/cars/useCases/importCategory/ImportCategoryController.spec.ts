@@ -44,7 +44,7 @@ describe('Import categories', () => {
   it('should be able to import a csv file of categories and save them into the app', async () => {
     const response = await request(app)
       .post('/categories/import')
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` })
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` })
       .attach('file', csv_file_test);
 
     expect(response.status).toBe(200);
@@ -53,12 +53,12 @@ describe('Import categories', () => {
   it('should not be able to save duplicate categories, from import', async () => {
     await request(app)
       .post('/categories/import')
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` })
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` })
       .attach('file', csv_file_test);
 
     const response = await request(app)
       .post('/categories/import')
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` })
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` })
       .attach('file', csv_file_test);
 
     expect(response.status).toBe(200);
@@ -67,7 +67,7 @@ describe('Import categories', () => {
   it('should not be able to import categories from an invalid format file', async () => {
     const response = await request(app)
       .post('/categories/import')
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` })
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` })
       .attach('file', invalid_file_test);
 
     expect(response.status).toBe(400);
@@ -77,7 +77,7 @@ describe('Import categories', () => {
   it('should not be able to import categories from an invalid csv file', async () => {
     const response = await request(app)
       .post('/categories/import')
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` })
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` })
       .attach('file', invalid_csv_file);
 
     expect(response.status).toBe(500);

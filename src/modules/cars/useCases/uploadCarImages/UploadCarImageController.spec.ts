@@ -4,9 +4,9 @@ import { Connection } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
 import { ICreateCarDTO } from '@modules/cars/dtos/ICreateCarDTO';
+import { LocalStorageProvider } from '@shared/container/providers/StorageProvider/implementations/LocalStorageProvider';
 import { app } from '@shared/infra/http/app';
 import createConnection from '@shared/infra/typeorm';
-import { fileMethods } from '@utils/file';
 
 let connection: Connection;
 
@@ -16,6 +16,8 @@ let responseCar: Response;
 
 const carImage01 = `./assets/car_image01.jpg`;
 const carImage02 = `./assets/car_image02.jpg`;
+
+const localStorageProvider = new LocalStorageProvider();
 
 describe('Upload car images', () => {
   const carTest: ICreateCarDTO = {
@@ -50,7 +52,7 @@ describe('Upload car images', () => {
     responseCategory = await request(app)
       .post('/categories')
       .send({ name: 'Category Test', description: 'Category Test description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     responseCar = await request(app)
       .post('/cars')
@@ -60,7 +62,7 @@ describe('Upload car images', () => {
         license_plate: '98568211',
         category_id: `${responseCategory.body.id}`,
       })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
   });
 
   afterAll(async () => {
@@ -71,13 +73,15 @@ describe('Upload car images', () => {
   it('should be able to upload some images to a car', async () => {
     const response = await request(app)
       .post(`/cars/images/${responseCar.body.id}`)
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` })
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` })
       .attach('images', carImage01)
       .attach('images', carImage02);
 
-    response.body.map(async (image: string) => {
-      await fileMethods.deleteFile(`./tmp/cars/${image}`);
-    });
+    await Promise.all(
+      response.body.map(async (image: string) => {
+        await localStorageProvider.delete(image, 'cars');
+      })
+    );
 
     expect(response.status).toBe(201);
   });

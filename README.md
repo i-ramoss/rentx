@@ -73,7 +73,11 @@ $ docker-compose stop
 
 ### 🧪 Run the tests:
 ```bash
+# To run all tests and generate coverage reports:
 $ yarn test
+
+# To observe the functionality tests that are being changed:
+$ yarn test:watch
 
 # The coverage reports can be seen by going to /coverage/lcov-report/index.html and opening this html file in your browser. 
 ```

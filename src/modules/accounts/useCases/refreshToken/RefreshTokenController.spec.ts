@@ -40,7 +40,7 @@ describe('Refresh token', () => {
       .send({ token: responseUserToken.body.refresh_token });
 
     expect(response.status).toBe(200);
-    expect(typeof response.body).toBe('string');
+    expect(typeof response.body).toBe('object');
   });
 
   it('should be able to create a refresh token for user by request query', async () => {
@@ -49,7 +49,7 @@ describe('Refresh token', () => {
       .query({ token: responseUserToken.body.refresh_token });
 
     expect(response.status).toBe(200);
-    expect(typeof response.body).toBe('string');
+    expect(typeof response.body).toBe('object');
   });
 
   it('should be able to create a refresh token for user by request header', async () => {
@@ -58,7 +58,7 @@ describe('Refresh token', () => {
       .set('x-access-token', responseUserToken.body.refresh_token);
 
     expect(response.status).toBe(200);
-    expect(typeof response.body).toBe('string');
+    expect(typeof response.body).toBe('object');
   });
 
   it('should not be able to create a refresh token for a invalid user token', async () => {

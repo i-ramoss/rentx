@@ -50,26 +50,26 @@ describe('List rentals by user', () => {
     responseCategory = await request(app)
       .post('/categories')
       .send({ name: 'Category Supertest', description: 'Category Supertest description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     responseCar = await request(app)
       .post('/cars')
       .send({ ...carTest, license_plate: '81062954', category_id: `${responseCategory.body.id}` })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     responseRental = await request(app)
       .post('/rentals')
       .send({ car_id: responseCar.body.id, expected_return_date: dayAdd24Hours })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     await request(app)
       .post(`/rentals/devolution/${responseRental.body.id}`)
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     await request(app)
       .post('/rentals')
       .send({ car_id: responseCar.body.id, expected_return_date: dayAdd24Hours })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
   });
 
   afterAll(async () => {
@@ -80,7 +80,7 @@ describe('List rentals by user', () => {
   it('should be able to list all rentals by an user', async () => {
     const response = await request(app)
       .get('/rentals/user')
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(

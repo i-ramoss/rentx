@@ -41,7 +41,7 @@ describe('Create Category Controller', () => {
     const response = await request(app)
       .post('/categories')
       .send({ name: 'Category Supertest', description: 'Category Supertest description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(201);
   });
@@ -50,7 +50,7 @@ describe('Create Category Controller', () => {
     const response = await request(app)
       .post('/categories')
       .send({ name: 'Category Supertest', description: 'Category Supertest description' })
-      .set({ Authorization: `Bearer ${responseAdminUserToken.body.refresh_token}` });
+      .set({ Authorization: `Bearer ${responseAdminUserToken.body.token}` });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: 'Category already exists!' });
