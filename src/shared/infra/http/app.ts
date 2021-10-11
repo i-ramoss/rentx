@@ -6,7 +6,6 @@ import 'express-async-errors';
 import swaggerUi from 'swagger-ui-express';
 
 import upload from '@config/upload';
-// importa o sentry na aplicação
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import '@shared/container';
@@ -24,7 +23,6 @@ const app = express();
 app.use(rateLimiter);
 
 Sentry.init({
-  // dsn - endereço onde os erros do servidor vão estar.
   dsn: process.env.SENTRY_DSN,
   integrations: [
     new Sentry.Integrations.Http({ tracing: true }),
