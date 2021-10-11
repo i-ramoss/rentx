@@ -12,6 +12,8 @@
     "seed:admin": "ts-node-dev -r tsconfig-paths/register src/shared/infra/typeorm/seeds/admin.ts"
   },
   "dependencies": {
+    "@sentry/node": "^6.13.3",
+    "@sentry/tracing": "^6.13.3",
     "aws-sdk": "^2.1001.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.4.0",
