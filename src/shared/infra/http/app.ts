@@ -9,6 +9,7 @@ import '@shared/container';
 
 import upload from '@config/upload';
 import { AppError } from '@shared/errors/AppError';
+import { rateLimiter } from '@shared/infra/http/middlewares/rateLimiter';
 import createConnection from '@shared/infra/typeorm';
 
 import swaggerFile from '../../../swagger.json';
@@ -17,6 +18,9 @@ import { router } from './routes';
 createConnection();
 
 const app = express();
+
+// utiliza o rateLimiter na aplicação
+app.use(rateLimiter);
 
 app.use(express.json());
 
