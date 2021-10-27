@@ -2,6 +2,7 @@ import request from 'supertest';
 import { Connection } from 'typeorm';
 
 import { app } from '@shared/infra/http/app';
+import { redisClient } from '@shared/infra/http/middlewares/rateLimiter';
 import createConnection from '@shared/infra/typeorm';
 
 let connection: Connection;
@@ -23,6 +24,8 @@ describe('Send forgot password mail', () => {
   afterAll(async () => {
     await connection.dropDatabase();
     await connection.close();
+
+    redisClient.quit();
   });
 
   it('should be able to send a forgot password mail to the user', async () => {

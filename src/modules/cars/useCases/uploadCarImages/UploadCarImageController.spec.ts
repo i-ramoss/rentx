@@ -6,6 +6,7 @@ import { v4 as uuidV4 } from 'uuid';
 import { ICreateCarDTO } from '@modules/cars/dtos/ICreateCarDTO';
 import { LocalStorageProvider } from '@shared/container/providers/StorageProvider/implementations/LocalStorageProvider';
 import { app } from '@shared/infra/http/app';
+import { redisClient } from '@shared/infra/http/middlewares/rateLimiter';
 import createConnection from '@shared/infra/typeorm';
 
 let connection: Connection;
@@ -68,6 +69,8 @@ describe('Upload car images', () => {
   afterAll(async () => {
     await connection.dropDatabase();
     await connection.close();
+
+    redisClient.quit();
   });
 
   it('should be able to upload some images to a car', async () => {
