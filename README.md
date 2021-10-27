@@ -43,6 +43,7 @@ To clone and run this API you will need the following software installed on your
 
 - [Git][git]
 - [Node][nodejs]
+- [Yarn][yarn]
 - [Docker][docker]
 
 ### :electric_plug: Install dependencies and run the application:
@@ -59,15 +60,23 @@ $ yarn
 # Create the app containers:
 $ docker-compose up -d
 
-# Start the server and the database:
-$ docker-compose start
+# Make a copy of the file "ormconfig.example.json" with the name "ormconfig.json":
+# Fill in the correct data to be able to connect to the database
+$ cp ormconfig.example.json ormconfig.json
+
+# Make a copy of the ".env.example" file with the name ".env":
+# Some environment variables are essential for the API to work in production
+$ cp .env.example .env
 
 # Run the migrations:
 $ yarn typeorm migrations:run
 
+# Start the application
+$ yarn dev
+
 # The server is running at port 3333 (http://localhost:3333/)
 
-# To stop the server and database:
+# To stop the database:
 $ docker-compose stop
 ```
 
@@ -83,10 +92,11 @@ $ yarn test:watch
 ```
 
 ## :books: Documentation:
-All API endpoints have been documented using Swagger. To view just access the URL below or click on this [link](http://localhost:3333/api-docs). <br>
+All API endpoints have been documented using Swagger. To view just access the URL below or click on this [link](https://deploy.ianramos.dev/api-docs/). <br>
 *Remember to start the server first*
 
-*http://localhost:3333/api-docs* 
+Local: *http://localhost:3333/api-docs* <br>
+Production *https://deploy.ianramos.dev/api-docs/*
 
 
 ## 📌 Project requeriments:
@@ -126,6 +136,7 @@ Feel free to bring new features or fix problems, it will be a pleasure! 💜
 [git]: https://git-scm.com
 [docker]: https://www.docker.com/
 [jest]: https://jestjs.io/
+[yarn]: https://yarnpkg.com/
 
 [license]: https://github.com/i-ramoss/Foodfy/blob/master/LICENSE
 [linkedin]: https://www.linkedin.com/in/ian-ramos/

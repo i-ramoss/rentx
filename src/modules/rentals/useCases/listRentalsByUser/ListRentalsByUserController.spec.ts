@@ -6,6 +6,7 @@ import { v4 as uuidV4 } from 'uuid';
 
 import { ICreateCarDTO } from '@modules/cars/dtos/ICreateCarDTO';
 import { app } from '@shared/infra/http/app';
+import { redisClient } from '@shared/infra/http/middlewares/rateLimiter';
 import createConnection from '@shared/infra/typeorm';
 
 let connection: Connection;
@@ -75,6 +76,8 @@ describe('List rentals by user', () => {
   afterAll(async () => {
     await connection.dropDatabase();
     await connection.close();
+
+    redisClient.quit();
   });
 
   it('should be able to list all rentals by an user', async () => {
