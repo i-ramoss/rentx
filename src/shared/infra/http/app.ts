@@ -22,14 +22,16 @@ const app = express();
 
 app.use(rateLimiter);
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  integrations: [
-    new Sentry.Integrations.Http({ tracing: true }),
-    new Tracing.Integrations.Express({ app }),
-  ],
-  tracesSampleRate: 1.0,
-});
+if (process.env.NODE_ENV !== 'test') {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    integrations: [
+      new Sentry.Integrations.Http({ tracing: true }),
+      new Tracing.Integrations.Express({ app }),
+    ],
+    tracesSampleRate: 1.0,
+  });
+}
 
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
